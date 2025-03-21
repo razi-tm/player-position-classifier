@@ -1,5 +1,7 @@
 # Player Position Classification using CNN
 
+***
+
 # PyTorch
 
 This project implements a convolutional neural network (CNN) to classify football player positions (Forward, Midfielder, Defender, Goalkeeper) based on heatmap images. The model is built using PyTorch and follows a standard deep learning pipeline for image classification.
@@ -130,6 +132,8 @@ images = images.to('cuda')
 - Increase model complexity for better accuracy.
 - Implement performance evaluation (e.g., confusion matrix, precision/recall).
 
+***
+
 # Keras
 
 This project uses a Convolutional Neural Network (CNN) implemented with Keras to classify soccer player positions (Forward, Midfielder, Defender, Goalkeeper) based on heatmap images.
@@ -246,6 +250,8 @@ Goalkeeper
 
 3. **Low Accuracy**:
    Increase the number of epochs, add data augmentation, or tune the model.
+
+***
 
 # TensorFlow
 
