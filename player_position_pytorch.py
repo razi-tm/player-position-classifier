@@ -10,6 +10,10 @@ from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms
 from sklearn.model_selection import train_test_split
 
+
+# Check for GPU
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
 # Define dataset class
 class HeatmapDataset(Dataset):
     def __init__(self, image_paths, labels, transform=None):
@@ -84,13 +88,14 @@ def train_model():
     train_loader = DataLoader(train_dataset, batch_size=16, shuffle=True)
     val_loader = DataLoader(val_dataset, batch_size=16, shuffle=False)
     
-    model = PlayerPositionCNN()
+    model = PlayerPositionCNN().to(device)
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=0.001)
     
     for epoch in range(10):
         model.train()
         for images, labels in train_loader:
+            images, labels = images.to(device), labels.to(device)  # Move data to GPU
             print("Input shape: ", images.shape)  # Should be [batch_size, 1, 64, 64]
             optimizer.zero_grad()
             outputs = model(images)
@@ -117,10 +122,10 @@ def predict_test_images(model, categories):
         test_images.append(image)
         test_filenames.append(filename)
     
-    test_images = torch.tensor(np.array(test_images), dtype=torch.float32)
+    test_images = torch.tensor(np.array(test_images), dtype=torch.float32).to(device)
     
     model.eval()
-    predictions = model(test_images).detach().numpy()
+    predictions = model(test_images).detach().cpu().numpy()
     predicted_labels = [list(categories.keys())[np.argmax(pred)] for pred in predictions]
     
     df = pd.DataFrame(predicted_labels, columns=["Position"])
